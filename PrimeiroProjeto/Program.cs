@@ -1,8 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
-
-List<string> bandsList = new List<string>{"100gecs", "Death Grips", "Deftones", "Godspeed You! Black Emperor"};
+Dictionary<string, List<int>> registeredBands = new Dictionary<string, List<int>>();
+registeredBands.Add("100gecs", new List<int> { 10,9 ,8 });
+registeredBands.Add("Deftones", new List<int> { 9, 10, 9 });
+//List<string> bandsList = new List<string>{"100gecs", "Death Grips", "Deftones", "Godspeed You! Black Emperor"};
 void SplashScreen()
 {
     Console.WriteLine(@"
@@ -39,7 +41,7 @@ void ShowMenuOptions()
             RegisterBand();
             break;
         case 3:
-            Console.WriteLine("\nYOU CHOSE OPTION " + numericalOption);
+            RateBand();
             break;
         case 4:
             Console.WriteLine("\nYOU CHOSE OPTION " + numericalOption);
@@ -51,16 +53,13 @@ void ShowMenuOptions()
     }
 }
 
-SplashScreen();
-ShowMenuOptions();
-
 void RegisterBand()
 {
     Console.Clear();
     ShowOptionTitle("Register a band");
     Console.WriteLine("Type the name of the band you want to register");
     string bandName = Console.ReadLine()!;
-    bandsList.Add(bandName);
+    registeredBands.Add(bandName, new List<int> { });
     Console.WriteLine($"The band {bandName} was registered successfully");
     Thread.Sleep(2000);
     Console.Clear();
@@ -71,11 +70,10 @@ void ShowBands()
 {
     Console.Clear();
     ShowOptionTitle("Bands registered");
-    for(int i = 0; i < bandsList.Count; i++)
+    foreach (string band in registeredBands.Keys)
     {
-        Console.WriteLine($"{bandsList[i]}");
+        Console.WriteLine($"{band}");
     }
-
     Console.WriteLine("\n************************");
     Console.WriteLine("Press any key to return");
     Console.ReadKey();
@@ -90,3 +88,30 @@ void ShowOptionTitle(string title)
     Console.WriteLine(title);
     Console.WriteLine(borders + "\n");
 }
+
+void RateBand()
+{
+    Console.Clear();
+    ShowOptionTitle("Rate a band");
+    Console.WriteLine("Type the name of the band you want to rate: ");
+    string bandName = Console.ReadLine()!;
+    if (registeredBands.ContainsKey(bandName))
+    {
+        Console.WriteLine($"Rating {bandName}, please type a rating between 1-10: ");
+        int rating = int.Parse(Console.ReadLine()!);
+        registeredBands[bandName].Add(rating);
+        Console.WriteLine($"Your rating was successfully registered to {bandName}");
+        Thread.Sleep(2000);
+        ShowMenuOptions();
+    }
+    else
+    {
+        Console.WriteLine($"Band {bandName} not found!");
+        Console.WriteLine("press any key to try again");
+        Console.ReadKey();
+        RateBand();
+    }
+}
+
+SplashScreen();
+ShowMenuOptions();
