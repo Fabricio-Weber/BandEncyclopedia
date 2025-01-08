@@ -44,7 +44,7 @@ void ShowMenuOptions()
             RateBand();
             break;
         case 4:
-            Console.WriteLine("\nYOU CHOSE OPTION " + numericalOption);
+            AverageScore();
             break;
         case -1: break;
         default:
@@ -113,5 +113,28 @@ void RateBand()
     }
 }
 
+void AverageScore()
+{
+    Console.Clear();
+    int rating = 0;
+    ShowOptionTitle("Band Averge Score");
+    string bandName = Console.ReadLine()!;
+    if (registeredBands.ContainsKey(bandName))
+    {
+
+        for (int i = 0; i < registeredBands[bandName].Count; i++)
+        {
+            rating = registeredBands[bandName][i] + rating;
+        }
+        Console.WriteLine($"\n{bandName} : {rating / registeredBands[bandName].Count}");
+        rating = 0;
+    }
+    else {
+        Console.WriteLine("Band not found, press any key to try again");
+        Console.ReadKey();
+        AverageScore();
+    }
+
+}
 SplashScreen();
 ShowMenuOptions();
